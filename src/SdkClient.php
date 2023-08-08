@@ -2,6 +2,6 @@
 
 namespace Rpungello\SdkClient;
 
-class SdkClientClass
+class SdkClient
 {
 }
