@@ -16,42 +16,38 @@ class SdkClient
 
     public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null)
     {
-        $this->guzzle = static::getGuzzleClient($this->baseUri, $this->handler);
+        $this->guzzle = static::getGuzzleClient();
     }
 
     /**
      * Instantiates a new Guzzle client, which will be used when interfacing with the Web Distribution API.
      *
-     * @param string $baseUri
-     * @param HandlerStack|null $handler
      * @return GuzzleClient
      */
-    protected static function getGuzzleClient(string $baseUri, ?HandlerStack $handler = null): GuzzleClient
+    protected function getGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient(
-            static::getGuzzleClientConfig($baseUri, $handler),
+            $this->getGuzzleClientConfig(),
         );
     }
 
     /**
      * Gets the config array for a new Guzzle client
      *
-     * @param string $baseUri
-     * @param HandlerStack|null $handler
      * @return array
      */
-    protected static function getGuzzleClientConfig(string $baseUri, ?HandlerStack $handler = null): array
+    protected function getGuzzleClientConfig(): array
     {
         $config = [
-            'base_uri' => $baseUri,
+            'base_uri' => $this->baseUri,
             'cookies' => true,
             'headers' => [
                 'accept' => 'application/json',
             ],
         ];
 
-        if (! is_null($handler)) {
-            $config['handler'] = $handler;
+        if (! is_null($this->handler)) {
+            $config['handler'] = $this->handler;
         }
 
         return $config;
