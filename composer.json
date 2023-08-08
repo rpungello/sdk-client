@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": "^8.1",
-        "guzzlehttp/guzzle": "^7.7"
+        "guzzlehttp/guzzle": "^7.7",
+        "spatie/data-transfer-object": "^3.9"
     },
     "require-dev": {
         "pestphp/pest": "^1.20",
