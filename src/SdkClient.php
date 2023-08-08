@@ -16,6 +16,7 @@ class SdkClient
 
     public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null)
     {
+        $this->guzzle = static::getGuzzleClient($this->baseUri, $this->handler);
     }
 
     /**
@@ -139,6 +140,24 @@ class SdkClient
             $this->get($uri, $query)->getBody()->getContents(),
             JSON_OBJECT_AS_ARRAY
         );
+    }
+
+    /**
+     * Performs a standard GET request, but parses the result as a JSON array
+     *
+     * @param string $uri
+     * @param string $dtoClass
+     * @param array $query
+     * @return array
+     * @throws GuzzleException
+     * @throws UnknownProperties
+     */
+    public function getDto(string $uri, string $dtoClass, array $query = []): DataTransferObject
+    {
+        return new $dtoClass(json_decode(
+            $this->get($uri, $query)->getBody()->getContents(),
+            JSON_OBJECT_AS_ARRAY
+        ));
     }
 
     /**
