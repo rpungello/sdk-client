@@ -148,9 +148,8 @@ class SdkClient
      * @param string $uri
      * @param string $dtoClass
      * @param array $query
-     * @return array
+     * @return DataTransferObject
      * @throws GuzzleException
-     * @throws UnknownProperties
      */
     public function getDto(string $uri, string $dtoClass, array $query = []): DataTransferObject
     {
