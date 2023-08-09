@@ -20,7 +20,7 @@ class SdkClient
     }
 
     /**
-     * Instantiates a new Guzzle client, which will be used when interfacing with the Web Distribution API.
+     * Instantiates a new Guzzle client
      *
      * @return GuzzleClient
      */
