@@ -5,6 +5,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Rpungello\SdkClient\Casters\DateTimeCaster;
 use Rpungello\SdkClient\Tests\Dtos\DummyDto;
+use Rpungello\SdkClient\Tests\Dtos\DummyDtoDateFormat;
 
 it('can convert valid dates', function () {
     $caster = new DateTimeCaster([DateTimeImmutable::class]);
@@ -42,6 +43,26 @@ it('can make get dto requests with dates', function () {
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
     $response = $client->getDto('dummy', DummyDto::class);
     expect($response)->toBeInstanceOf(DummyDto::class);
+    expect($response->id)->toBe(1);
+    expect($response->name)->toBe('John Smith');
+    expect($response->comment)->toBe('This is a comment');
+    expect($response->date)->toBeInstanceOf(DateTimeImmutable::class);
+    expect($response->date->format('Y-m-d'))->toBe('2023-01-01');
+});
+
+it('can make get dto requests with dates and custom formats', function () {
+    $data = [
+        'id' => 1,
+        'name' => 'John Smith',
+        'comment' => 'This is a comment',
+        'date' => '01/01/2023',
+    ];
+    $mock = new MockHandler([
+        new Response(200, ['content-type' => 'application/json'], json_encode($data)),
+    ]);
+    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $response = $client->getDto('dummy', DummyDtoDateFormat::class);
+    expect($response)->toBeInstanceOf(DummyDtoDateFormat::class);
     expect($response->id)->toBe(1);
     expect($response->name)->toBe('John Smith');
     expect($response->comment)->toBe('This is a comment');
