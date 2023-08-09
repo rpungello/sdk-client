@@ -54,7 +54,7 @@ class SdkClient
     }
 
     /**
-     * Performs a GET request against the Web Distribution API
+     * Performs a GET request, returning the raw Guzzle response
      *
      * @param string $uri
      * @param array $query
@@ -72,6 +72,8 @@ class SdkClient
     }
 
     /**
+     * Performs a POST request, parsing the response as a DTO
+     *
      * @param string $uri
      * @param DataTransferObject|null $dto
      * @return DataTransferObject
@@ -86,6 +88,8 @@ class SdkClient
     }
 
     /**
+     * Performs a POST request, parsing the response as a JSON array
+     *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @return array
@@ -100,6 +104,8 @@ class SdkClient
     }
 
     /**
+     * Performs a POST request, returning the raw Guzzle response
+     *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @return Response
@@ -123,7 +129,7 @@ class SdkClient
     }
 
     /**
-     * Performs a standard GET request, but parses the result as a JSON array
+     * Performs a standard GET request, parsing the result as a JSON array
      *
      * @param string $uri
      * @param array $query
@@ -139,7 +145,7 @@ class SdkClient
     }
 
     /**
-     * Performs a standard GET request, but parses the result as a JSON array
+     * Performs a standard GET request, but parses the result as a DTO
      *
      * @param string $uri
      * @param string $dtoClass
@@ -155,7 +161,7 @@ class SdkClient
     }
 
     /**
-     * Performs a standard GET request, but parses the result as a JSON array
+     * Performs a standard GET request, but parses the result as an array of DTOs
      *
      * @param string $uri
      * @param string $dtoClass
@@ -174,6 +180,8 @@ class SdkClient
     }
 
     /**
+     * Performs a PUT request, parsing the response as a DTO
+     *
      * @param string $uri
      * @param DataTransferObject|null $dto
      * @param array $data
@@ -194,6 +202,8 @@ class SdkClient
     }
 
     /**
+     * Performs a PUT request, parsing the response as a JSON array
+     *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @return array
@@ -208,6 +218,8 @@ class SdkClient
     }
 
     /**
+     * Performs a PUT request, returning the raw Guzzle response
+     *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @return Response
