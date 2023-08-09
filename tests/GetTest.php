@@ -17,7 +17,7 @@ it('can make get requests', function () {
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
     $response = $client->get('dummy');
     expect($response)->toBeInstanceOf(Response::class);
-    expect($response->getBody()->getContents())->toBe('{"id":1,"name":"John Smith","comment":"This is a comment"}');
+    expect($response->getBody()->getContents())->toBe('{"id":1,"name":"John Smith","comment":"This is a comment","date":null}');
 });
 
 it('can make get json requests', function () {
@@ -50,6 +50,7 @@ it('can make get dto requests', function () {
     expect($response->id)->toBe(1);
     expect($response->name)->toBe('John Smith');
     expect($response->comment)->toBe('This is a comment');
+    expect($response->date)->toBeNull();
 });
 
 it('can make get dto array requests', function () {
@@ -73,8 +74,10 @@ it('can make get dto array requests', function () {
     expect($response[0]->id)->toBe(1);
     expect($response[0]->name)->toBe('John Smith');
     expect($response[0]->comment)->toBe('This is a comment');
+    expect($response[0]->date)->toBeNull();
 
     expect($response[1]->id)->toBe(2);
     expect($response[1]->name)->toBe('Jane Doe');
     expect($response[1]->comment)->toBeNull();
+    expect($response[1]->date)->toBeNull();
 });
