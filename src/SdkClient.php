@@ -166,6 +166,7 @@ class SdkClient
     public function getDtoArray(string $uri, string $dtoClass, array $query = []): array
     {
         $array = $this->getJson($uri, $query);
+
         return array_map(
             fn (array $item) => new $dtoClass($item),
             $array
