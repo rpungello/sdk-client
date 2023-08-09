@@ -6,46 +6,41 @@ use GuzzleHttp\Psr7\Response;
 use Rpungello\SdkClient\Tests\Dtos\DummyDto;
 
 it('can make put requests', function () {
-    $mockDto = new DummyDto(
-        id: 1,
-        name: 'John Smith',
-        comment: 'This is a comment'
-    );
     $mock = new MockHandler([
-        new Response(200, ['content-type' => 'application/json'], json_encode($mockDto->toArray())),
+        new Response(200, ['content-type' => 'application/json'], 'Hello world'),
     ]);
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
-    $response = $client->put('dummy', $mockDto);
+    $response = $client->put('dummy');
     expect($response)->toBeInstanceOf(Response::class);
-    expect($response->getBody()->getContents())->toBe('{"id":1,"name":"John Smith","comment":"This is a comment","date":null}');
+    expect($response->getBody()->getContents())->toBe('Hello world');
 });
 
 it('can make put json requests', function () {
-    $mockDto = new DummyDto(
-        id: 1,
-        name: 'John Smith',
-        comment: 'This is a comment'
-    );
+    $data = [
+        'id' => 1,
+        'name' => 'John Smith',
+        'comment' => 'This is a comment',
+    ];
     $mock = new MockHandler([
-        new Response(200, ['content-type' => 'application/json'], json_encode($mockDto->toArray())),
+        new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
-    $response = $client->putJson('dummy', $mockDto);
+    $response = $client->putJson('dummy', $data);
     expect($response)->toBeArray();
-    expect($response)->toBe($mockDto->toArray());
+    expect($response)->toBe($data);
 });
 
 it('can make put dto requests', function () {
-    $mockDto = new DummyDto(
-        id: 1,
-        name: 'John Smith',
-        comment: 'This is a comment'
-    );
+    $data = [
+        'id' => 1,
+        'name' => 'John Smith',
+        'comment' => 'This is a comment',
+    ];
     $mock = new MockHandler([
-        new Response(200, ['content-type' => 'application/json'], json_encode($mockDto->toArray())),
+        new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
-    $response = $client->putDto('dummy', $mockDto);
+    $response = $client->putDto('dummy', new DummyDto($data));
     expect($response)->toBeInstanceOf(DummyDto::class);
     expect($response->id)->toBe(1);
     expect($response->name)->toBe('John Smith');
