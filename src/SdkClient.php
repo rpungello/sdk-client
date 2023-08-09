@@ -149,10 +149,27 @@ class SdkClient
      */
     public function getDto(string $uri, string $dtoClass, array $query = []): DataTransferObject
     {
-        return new $dtoClass(json_decode(
-            $this->get($uri, $query)->getBody()->getContents(),
-            JSON_OBJECT_AS_ARRAY
-        ));
+        return new $dtoClass(
+            $this->getJson($uri, $query)
+        );
+    }
+
+    /**
+     * Performs a standard GET request, but parses the result as a JSON array
+     *
+     * @param string $uri
+     * @param string $dtoClass
+     * @param array $query
+     * @return DataTransferObject[]
+     * @throws GuzzleException
+     */
+    public function getDtoArray(string $uri, string $dtoClass, array $query = []): array
+    {
+        $array = $this->getJson($uri, $query);
+        return array_map(
+            fn (array $item) => new $dtoClass($item),
+            $array
+        );
     }
 
     /**
