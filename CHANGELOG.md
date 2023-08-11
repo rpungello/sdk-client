@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.3.0 - 2023-08-11
+
+Added support for nesbot/carbon dates
+
 ## 1.2.0 - 2023-08-09
 
 Added a predefined caster for date/datetimes
