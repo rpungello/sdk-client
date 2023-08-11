@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.5.0 - 2023-08-11
+
+Add ability to define request-specific headers
+
 ## 1.4.0 - 2023-08-11
 
 Added default casters for date types
