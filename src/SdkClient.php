@@ -154,6 +154,7 @@ class SdkClient
      * @param array $headers
      * @return DataTransferObject
      * @throws GuzzleException
+     * @throws UnknownProperties
      */
     public function getDto(string $uri, string $dtoClass, array $query = [], array $headers = []): DataTransferObject
     {
@@ -171,6 +172,7 @@ class SdkClient
      * @param array $headers
      * @return DataTransferObject[]
      * @throws GuzzleException
+     * @throws UnknownProperties
      */
     public function getDtoArray(string $uri, string $dtoClass, array $query = [], array $headers = []): array
     {
