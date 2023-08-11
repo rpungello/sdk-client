@@ -4,8 +4,8 @@ namespace Rpungello\SdkClient\Tests\Dtos;
 
 use DateTimeImmutable;
 use Rpungello\SdkClient\Casters\DateTimeCaster;
+use Rpungello\SdkClient\DataTransferObject;
 use Spatie\DataTransferObject\Attributes\CastWith;
-use Spatie\DataTransferObject\DataTransferObject;
 
 class DummyDtoDateFormat extends DataTransferObject
 {

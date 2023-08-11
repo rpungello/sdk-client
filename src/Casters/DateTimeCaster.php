@@ -7,7 +7,7 @@ use Spatie\DataTransferObject\Caster;
 
 class DateTimeCaster implements Caster
 {
-    public function __construct(private array $types, private readonly string $format = 'Y-m-d')
+    public function __construct(private array $types = [], private readonly string $format = 'Y-m-d')
     {
     }
 

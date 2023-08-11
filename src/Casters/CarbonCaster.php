@@ -8,7 +8,7 @@ use Spatie\DataTransferObject\Caster;
 
 class CarbonCaster implements Caster
 {
-    public function __construct(private array $types, private readonly ?string $format = null)
+    public function __construct(private array $types = [], private readonly ?string $format = null)
     {
     }
 
