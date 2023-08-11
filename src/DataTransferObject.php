@@ -14,5 +14,4 @@ use Spatie\DataTransferObject\Attributes\DefaultCast;
 ]
 class DataTransferObject extends \Spatie\DataTransferObject\DataTransferObject
 {
-
 }
