@@ -58,16 +58,23 @@ class SdkClient
      *
      * @param string $uri
      * @param array $query
+     * @param array $headers
      * @return Response
      * @throws GuzzleException
      */
-    public function get(string $uri, array $query = []): Response
+    public function get(string $uri, array $query = [], array $headers = []): Response
     {
+        $requestOptions = [
+            RequestOptions::QUERY => $query,
+        ];
+
+        if (! empty($headers)) {
+            $requestOptions[RequestOptions::HEADERS] = $headers;
+        }
+
         return $this->guzzle->get(
             $uri,
-            [
-                RequestOptions::QUERY => $query,
-            ]
+            $requestOptions
         );
     }
 
@@ -76,15 +83,16 @@ class SdkClient
      *
      * @param string $uri
      * @param DataTransferObject|null $dto
+     * @param array $headers
      * @return DataTransferObject
      * @throws GuzzleException
      * @throws UnknownProperties
      */
-    public function postDto(string $uri, DataTransferObject $dto = null): mixed
+    public function postDto(string $uri, DataTransferObject $dto = null, array $headers = []): mixed
     {
         $class = get_class($dto);
 
-        return new $class($this->postJson($uri, $dto));
+        return new $class($this->postJson($uri, $dto, $headers));
     }
 
     /**
@@ -92,13 +100,14 @@ class SdkClient
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
+     * @param array $headers
      * @return array
      * @throws GuzzleException
      */
-    public function postJson(string $uri, array|DataTransferObject|null $body = null): array
+    public function postJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): array
     {
         return json_decode(
-            $this->post($uri, $body)->getBody()->getContents(),
+            $this->post($uri, $body, $headers)->getBody()->getContents(),
             JSON_OBJECT_AS_ARRAY
         );
     }
@@ -108,22 +117,13 @@ class SdkClient
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
+     * @param array $headers
      * @return Response
      * @throws GuzzleException
      */
-    public function post(string $uri, array|DataTransferObject|null $body = null): Response
+    public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): Response
     {
-        if ($body instanceof DataTransferObject) {
-            $bodyJson = $body->toArray();
-        } else {
-            $bodyJson = $body;
-        }
-
-        $requestOptions = [];
-
-        if (! empty($bodyJson)) {
-            $requestOptions[RequestOptions::JSON] = $bodyJson;
-        }
+        $requestOptions = $this->getRequestOptions($body, $headers);
 
         return $this->guzzle->post($uri, $requestOptions);
     }
@@ -133,13 +133,14 @@ class SdkClient
      *
      * @param string $uri
      * @param array $query
+     * @param array $headers
      * @return array
      * @throws GuzzleException
      */
-    public function getJson(string $uri, array $query = []): array
+    public function getJson(string $uri, array $query = [], array $headers = []): array
     {
         return json_decode(
-            $this->get($uri, $query)->getBody()->getContents(),
+            $this->get($uri, $query, $headers)->getBody()->getContents(),
             JSON_OBJECT_AS_ARRAY
         );
     }
@@ -150,13 +151,14 @@ class SdkClient
      * @param string $uri
      * @param string $dtoClass
      * @param array $query
+     * @param array $headers
      * @return DataTransferObject
      * @throws GuzzleException
      */
-    public function getDto(string $uri, string $dtoClass, array $query = []): DataTransferObject
+    public function getDto(string $uri, string $dtoClass, array $query = [], array $headers = []): DataTransferObject
     {
         return new $dtoClass(
-            $this->getJson($uri, $query)
+            $this->getJson($uri, $query, $headers)
         );
     }
 
@@ -166,12 +168,13 @@ class SdkClient
      * @param string $uri
      * @param string $dtoClass
      * @param array $query
+     * @param array $headers
      * @return DataTransferObject[]
      * @throws GuzzleException
      */
-    public function getDtoArray(string $uri, string $dtoClass, array $query = []): array
+    public function getDtoArray(string $uri, string $dtoClass, array $query = [], array $headers = []): array
     {
-        $array = $this->getJson($uri, $query);
+        $array = $this->getJson($uri, $query, $headers);
 
         return array_map(
             fn (array $item) => new $dtoClass($item),
@@ -185,18 +188,20 @@ class SdkClient
      * @param string $uri
      * @param DataTransferObject|null $dto
      * @param array $data
+     * @param array $headers
      * @return DataTransferObject
      * @throws GuzzleException
      * @throws UnknownProperties
      */
-    public function putDto(string $uri, DataTransferObject $dto = null, array $data = []): mixed
+    public function putDto(string $uri, DataTransferObject $dto = null, array $data = [], array $headers = []): mixed
     {
         $class = get_class($dto);
 
         return new $class(
             $this->putJson(
                 $uri,
-                array_merge($data, $dto->toArray())
+                array_merge($data, $dto->toArray()),
+                $headers
             )
         );
     }
@@ -206,13 +211,14 @@ class SdkClient
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
+     * @param array $headers
      * @return array
      * @throws GuzzleException
      */
-    public function putJson(string $uri, array|DataTransferObject|null $body = null): array
+    public function putJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): array
     {
         return json_decode(
-            $this->put($uri, $body)->getBody()->getContents(),
+            $this->put($uri, $body, $headers)->getBody()->getContents(),
             JSON_OBJECT_AS_ARRAY
         );
     }
@@ -222,10 +228,23 @@ class SdkClient
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
+     * @param array $headers
      * @return Response
      * @throws GuzzleException
      */
-    public function put(string $uri, array|DataTransferObject|null $body = null): Response
+    public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): Response
+    {
+        $requestOptions = $this->getRequestOptions($body, $headers);
+
+        return $this->guzzle->put($uri, $requestOptions);
+    }
+
+    /**
+     * @param DataTransferObject|array|null $body
+     * @param array $headers
+     * @return array
+     */
+    public function getRequestOptions(DataTransferObject|array|null $body, array $headers): array
     {
         if ($body instanceof DataTransferObject) {
             $bodyJson = $body->toArray();
@@ -239,6 +258,10 @@ class SdkClient
             $requestOptions[RequestOptions::JSON] = $bodyJson;
         }
 
-        return $this->guzzle->put($uri, $requestOptions);
+        if (! empty($headers)) {
+            $requestOptions[RequestOptions::HEADERS] = $headers;
+        }
+
+        return $requestOptions;
     }
 }
