@@ -16,8 +16,55 @@ composer require rpungello/sdk-client
 
 ## Usage
 
+### Instantiate the client
+
 ```php
 $client = new Rpungello\SdkClient('https://example.com');
+```
+
+### GET requests
+
+```php
+// Returns a Psr\Http\Message\ResponseInterface response
+$response = $client->get('/api/v1/users');
+
+// Specify a query string
+$response = $client->get('/api/v1/users', [
+    'page' => 1,
+    'limit' => 10,
+]);
+
+// Returns a json-decoded array from the response body
+$response = $client->getJson('/api/v1/users');
+
+// Takes the JSON data returned and wraps it in a DTO for static typing
+$response = $client->getDto('/api/v1/users/1', UserDto::class);
+
+// Takes the JSON data returned and converts it to an array of DTOs for static typing
+$response = $client->getDtoArray('/api/v1/users', UserDto::class);
+```
+
+### PUT/POST requests
+
+```php
+// Returns a Psr\Http\Message\ResponseInterface response
+$response = $client->post('/api/v1/users', [
+    'name' => 'John Doe',
+    'email' => 'john@example.com',
+]);
+
+// Returns a json-decoded array from the response body
+$response = $client->postJson('/api/v1/users', [
+    'name' => 'John Doe',
+    'email' => 'john@example.com',
+]);
+
+// Takes the JSON data returned and wraps it in a DTO for static typing
+$user = new UserDto([
+    'name' => 'John Doe',
+    'email' => 'john@example.com',
+]);
+$response = $client->postDto('/api/v1/users', $user);
 ```
 
 ## Testing
