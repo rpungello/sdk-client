@@ -5,8 +5,8 @@ namespace Rpungello\SdkClient;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -59,10 +59,10 @@ class SdkClient
      * @param string $uri
      * @param array $query
      * @param array $headers
-     * @return Response
+     * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function get(string $uri, array $query = [], array $headers = []): Response
+    public function get(string $uri, array $query = [], array $headers = []): ResponseInterface
     {
         $requestOptions = [
             RequestOptions::QUERY => $query,
@@ -118,10 +118,10 @@ class SdkClient
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
-     * @return Response
+     * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): Response
+    public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         $requestOptions = $this->getRequestOptions($body, $headers);
 
@@ -231,10 +231,10 @@ class SdkClient
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
-     * @return Response
+     * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): Response
+    public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         $requestOptions = $this->getRequestOptions($body, $headers);
 
