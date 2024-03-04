@@ -39,8 +39,9 @@ it('can make post dto requests', function () {
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
+    $headers = ['http_errors' => false];
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
-    $response = $client->postDto('dummy', new DummyDto($data));
+    $response = $client->postDto('dummy', new DummyDto($data), $headers);
     expect($response)->toBeInstanceOf(DummyDto::class);
     expect($response->id)->toBe(1);
     expect($response->name)->toBe('John Smith');

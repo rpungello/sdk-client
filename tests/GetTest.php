@@ -9,8 +9,9 @@ it('can make get requests', function () {
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], 'Hello world'),
     ]);
+    $headers = ['http_errors' => false];
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
-    $response = $client->get('dummy');
+    $response = $client->get('dummy', [], $headers);
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->getBody()->getContents())->toBe('Hello world');
 });
