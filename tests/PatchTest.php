@@ -1,9 +1,9 @@
 <?php
 
 use GuzzleHttp\Handler\MockHandler;
-use Rpungello\SdkClient\SdkClient;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use Rpungello\SdkClient\SdkClient;
 use Rpungello\SdkClient\Tests\Dtos\DummyDto;
 
 it('should make patch request', function () {
