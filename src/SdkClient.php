@@ -242,6 +242,59 @@ class SdkClient
     }
 
     /**
+     * Performs a PATCH request, returning the raw Guzzle response
+     *
+     * @param string $uri
+     * @param array $headers
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
+    public function patch(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
+    {
+        $requestOptions = $this->getRequestOptions($body, $headers);
+
+        return $this->guzzle->patch($uri, $requestOptions);
+    }
+
+    /**
+     * Performs a PATCH request, parsing the response as a JSON array
+     *
+     * @param string $uri
+     * @param array|DataTransferObject|null $body
+     * @param array $headers
+     * @return array
+     * @throws GuzzleException
+     */
+    public function patchJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): array
+    {
+        return json_decode(
+            $this->patch($uri, $body, $headers)->getBody()->getContents(),
+            JSON_OBJECT_AS_ARRAY
+        );
+    }
+
+    /**
+     * @param string $uri
+     * @param DataTransferObject|null $dto
+     * @param array $data
+     * @param array $headers
+     * @return mixed
+     * @throws GuzzleException
+     */
+    public function patchDto(string $uri, DataTransferObject $dto = null, array $data = [], array $headers = []): mixed
+    {
+        $class = get_class($dto);
+
+        return new $class(
+            $this->patchJson(
+                $uri,
+                array_merge($data, $dto->toArray()),
+                $headers
+            )
+        );
+    }
+
+    /**
      * @param DataTransferObject|array|null $body
      * @param array $headers
      * @return array

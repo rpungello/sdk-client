@@ -44,7 +44,7 @@ $response = $client->getDto('/api/v1/users/1', UserDto::class);
 $response = $client->getDtoArray('/api/v1/users', UserDto::class);
 ```
 
-### PUT/POST requests
+### PUT/POST/PATCH requests
 
 ```php
 // Returns a Psr\Http\Message\ResponseInterface response
