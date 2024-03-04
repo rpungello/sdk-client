@@ -2,6 +2,11 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.6.0 - 2024-03-04
+
+- Added PATCH support
+- Testing improvements
+
 ## 1.5.1 - 2024-02-01
 
 Minor improvements
