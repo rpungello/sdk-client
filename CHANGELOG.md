@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.8.0 - 2024-03-26
+
+Add version info to composer.json
+
 ## 1.7.0 - 2024-03-26
 
 Add support for customizing some Guzzle options
