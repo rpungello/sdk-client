@@ -2,6 +2,14 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.7.0 - 2024-03-26
+
+Add support for customizing some Guzzle options
+
+- User agent
+- Accept
+- Cookies
+
 ## 1.6.0 - 2024-03-04
 
 - Added PATCH support
