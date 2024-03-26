@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.9.0 - 2024-03-26
+
+Add postJsonAsDto
+
 ## 1.8.0 - 2024-03-26
 
 Add version info to composer.json
