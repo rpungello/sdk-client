@@ -251,6 +251,7 @@ class SdkClient
      * Performs a PATCH request, returning the raw Guzzle response
      *
      * @param string $uri
+     * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return ResponseInterface
      * @throws GuzzleException
