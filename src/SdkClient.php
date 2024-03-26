@@ -14,7 +14,7 @@ class SdkClient
 {
     protected ?GuzzleClient $guzzle;
 
-    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = true)
+    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = false)
     {
         $this->guzzle = static::getGuzzleClient();
     }
