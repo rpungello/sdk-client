@@ -85,6 +85,19 @@ class SdkClient
     }
 
     /**
+     * @param string $uri
+     * @param array|DataTransferObject|null $body
+     * @param string $dtoClass
+     * @param array $headers
+     * @return DataTransferObject
+     * @throws GuzzleException
+     */
+    public function postJsonAsDto(string $uri, array|DataTransferObject|null $body, string $dtoClass, array $headers = []): mixed
+    {
+        return new $dtoClass($this->postJson($uri, $body, $headers));
+    }
+
+    /**
      * Performs a POST request, parsing the response as a DTO
      *
      * @param string $uri

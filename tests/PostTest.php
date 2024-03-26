@@ -48,3 +48,22 @@ it('can make post dto requests', function () {
     expect($response->comment)->toBe('This is a comment');
     expect($response->date)->toBeNull();
 });
+
+it('can make post json to dto requests', function () {
+    $data = [
+        'id' => 1,
+        'name' => 'John Smith',
+        'comment' => 'This is a comment',
+    ];
+    $mock = new MockHandler([
+        new Response(200, ['content-type' => 'application/json'], json_encode($data)),
+    ]);
+    $headers = ['http_errors' => false];
+    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $response = $client->postJsonAsDto('dummy', $data, DummyDto::class, $headers);
+    expect($response)->toBeInstanceOf(DummyDto::class)
+        ->and($response->id)->toBe(1)
+        ->and($response->name)->toBe('John Smith')
+        ->and($response->comment)->toBe('This is a comment')
+        ->and($response->date)->toBeNull();
+});
