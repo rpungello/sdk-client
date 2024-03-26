@@ -14,7 +14,7 @@ class SdkClient
 {
     protected ?GuzzleClient $guzzle;
 
-    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null)
+    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = true)
     {
         $this->guzzle = static::getGuzzleClient();
     }
@@ -40,14 +40,20 @@ class SdkClient
     {
         $config = [
             'base_uri' => $this->baseUri,
-            'cookies' => true,
-            'headers' => [
-                'accept' => 'application/json',
-            ],
+            'cookies' => $this->cookies,
+            'headers' => [],
         ];
 
         if (! is_null($this->handler)) {
             $config['handler'] = $this->handler;
+        }
+
+        if (! empty($this->userAgent)) {
+            $config['headers']['user-agent'] = $this->userAgent;
+        }
+
+        if (! empty($this->accept)) {
+            $config['headers']['accept'] = $this->accept;
         }
 
         return $config;
