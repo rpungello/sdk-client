@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.10.2 - 2024-08-05
+
+Fix return types for multipart requests
+
 ## 1.10.1 - 2024-08-05
 
 Fix composer version
