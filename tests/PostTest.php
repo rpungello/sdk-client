@@ -70,7 +70,7 @@ it('can make post json to dto requests', function () {
 
 it('can make post multipart requests', function () {
     $tempDir = sys_get_temp_dir();
-    $tempFile = "/$tempDir/test.txt";
+    $tempFile = "$tempDir/test.txt";
     file_put_contents($tempFile, 'Hello world');
     $data = [
         'id' => 1,
