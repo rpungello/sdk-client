@@ -67,3 +67,22 @@ it('can make post json to dto requests', function () {
         ->and($response->comment)->toBe('This is a comment')
         ->and($response->date)->toBeNull();
 });
+
+it('can make post multipart requests', function () {
+    file_put_contents('/tmp/test.txt', 'Hello world');
+    $data = [
+        'id' => 1,
+        'name' => 'Test Report',
+    ];
+    $mock = new MockHandler([
+        new Response(200, ['content-type' => 'application/json'], json_encode($data)),
+    ]);
+    $headers = ['http_errors' => false];
+    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $response = $client->postMultipart('dummy', [[
+        'name' => 'file',
+        'contents' => fopen('/tmp/test.txt', 'r'),
+    ]], $headers);
+
+    expect($response->getBody()->getContents())->toBe('{"id":1,"name":"Test Report"}');
+});

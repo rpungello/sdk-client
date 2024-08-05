@@ -132,6 +132,54 @@ class SdkClient
     }
 
     /**
+     * Performs a POST request with a multipart body, returning the raw Guzzle response
+     *
+     * @param string $uri
+     * @param array $body
+     * @param array $headers
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
+    public function postMultipart(string $uri, array $body, array $headers = []): ResponseInterface
+    {
+        $requestOptions = $this->getRequestOptions($body, $headers, false);
+
+        return $this->guzzle->post($uri, $requestOptions);
+    }
+
+    /**
+     * Performs a POST request with a multipart body, returning the response as a DTO
+     *
+     * @param string $uri
+     * @param array $body
+     * @param array $headers
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
+    public function postMultipartAsJson(string $uri, array $body, array $headers = []): ResponseInterface
+    {
+        return json_decode(
+            $this->postMultipart($uri, $body, $headers)->getBody()->getContents(),
+            JSON_OBJECT_AS_ARRAY
+        );
+    }
+
+    /**
+     * Performs a POST request with a multipart body, returning the response as a DTO
+     *
+     * @param string $uri
+     * @param array $body
+     * @param string $dtoClass
+     * @param array $headers
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
+    public function postMultipartAsDto(string $uri, array $body, string $dtoClass, array $headers = []): ResponseInterface
+    {
+        return new $dtoClass($this->postMultipartAsJson($uri, $body, $headers));
+    }
+
+    /**
      * Performs a POST request, returning the raw Guzzle response
      *
      * @param string $uri
@@ -317,20 +365,25 @@ class SdkClient
     /**
      * @param DataTransferObject|array|null $body
      * @param array $headers
+     * @param bool $json
      * @return array
      */
-    public function getRequestOptions(DataTransferObject|array|null $body, array $headers): array
+    public function getRequestOptions(DataTransferObject|array|null $body, array $headers, bool $json = true): array
     {
         if ($body instanceof DataTransferObject) {
-            $bodyJson = $body->toArray();
+            $formattedBody = $body->toArray();
         } else {
-            $bodyJson = $body;
+            $formattedBody = $body;
         }
 
         $requestOptions = [];
 
-        if (! empty($bodyJson)) {
-            $requestOptions[RequestOptions::JSON] = $bodyJson;
+        if (! empty($formattedBody)) {
+            if ($json) {
+                $requestOptions[RequestOptions::JSON] = $formattedBody;
+            } else {
+                $requestOptions[RequestOptions::MULTIPART] = $formattedBody;
+            }
         }
 
         if (! empty($headers)) {
