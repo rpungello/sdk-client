@@ -153,10 +153,10 @@ class SdkClient
      * @param string $uri
      * @param array $body
      * @param array $headers
-     * @return ResponseInterface
+     * @return array
      * @throws GuzzleException
      */
-    public function postMultipartAsJson(string $uri, array $body, array $headers = []): ResponseInterface
+    public function postMultipartAsJson(string $uri, array $body, array $headers = []): array
     {
         return json_decode(
             $this->postMultipart($uri, $body, $headers)->getBody()->getContents(),
@@ -171,10 +171,10 @@ class SdkClient
      * @param array $body
      * @param string $dtoClass
      * @param array $headers
-     * @return ResponseInterface
+     * @return DataTransferObject
      * @throws GuzzleException
      */
-    public function postMultipartAsDto(string $uri, array $body, string $dtoClass, array $headers = []): ResponseInterface
+    public function postMultipartAsDto(string $uri, array $body, string $dtoClass, array $headers = []): DataTransferObject
     {
         return new $dtoClass($this->postMultipartAsJson($uri, $body, $headers));
     }
