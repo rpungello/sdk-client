@@ -120,10 +120,10 @@ class SdkClient
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
-     * @return array
+     * @return array|null
      * @throws GuzzleException
      */
-    public function postJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): array
+    public function postJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ?array
     {
         return json_decode(
             $this->post($uri, $body, $headers)->getBody()->getContents(),
@@ -153,10 +153,10 @@ class SdkClient
      * @param string $uri
      * @param array $body
      * @param array $headers
-     * @return array
+     * @return array|null
      * @throws GuzzleException
      */
-    public function postMultipartAsJson(string $uri, array $body, array $headers = []): array
+    public function postMultipartAsJson(string $uri, array $body, array $headers = []): ?array
     {
         return json_decode(
             $this->postMultipart($uri, $body, $headers)->getBody()->getContents(),
@@ -201,10 +201,10 @@ class SdkClient
      * @param string $uri
      * @param array $query
      * @param array $headers
-     * @return array
+     * @return array|null
      * @throws GuzzleException
      */
-    public function getJson(string $uri, array $query = [], array $headers = []): array
+    public function getJson(string $uri, array $query = [], array $headers = []): ?array
     {
         return json_decode(
             $this->get($uri, $query, $headers)->getBody()->getContents(),
@@ -281,10 +281,10 @@ class SdkClient
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
-     * @return array
+     * @return array|null
      * @throws GuzzleException
      */
-    public function putJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): array
+    public function putJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ?array
     {
         return json_decode(
             $this->put($uri, $body, $headers)->getBody()->getContents(),
@@ -330,10 +330,10 @@ class SdkClient
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
-     * @return array
+     * @return array|null
      * @throws GuzzleException
      */
-    public function patchJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): array
+    public function patchJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ?array
     {
         return json_decode(
             $this->patch($uri, $body, $headers)->getBody()->getContents(),
