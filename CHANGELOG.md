@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.10.3 - 2024-09-10
+
+Allow null as the return type for JSON functions
+
 ## 1.10.2 - 2024-08-05
 
 Fix return types for multipart requests
