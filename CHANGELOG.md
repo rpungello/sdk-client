@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.11.1 - 2024-09-20
+
+Format multipart data as strings using serialize()
+
 ## 1.11.0 - 2024-09-20
 
 Added function to convert json arrays into multipart request bodies
