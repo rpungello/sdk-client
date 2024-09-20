@@ -392,4 +392,18 @@ class SdkClient
 
         return $requestOptions;
     }
+
+    public static function convertJsonToMultipart(array $json): array
+    {
+        $multipart = [];
+
+        foreach ($json as $key => $value) {
+            $multipart[] = [
+                'name' => $key,
+                'contents' => $value,
+            ];
+        }
+
+        return $multipart;
+    }
 }
