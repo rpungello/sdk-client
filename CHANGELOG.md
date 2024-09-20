@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.11.0 - 2024-09-20
+
+Added function to convert json arrays into multipart request bodies
+
 ## 1.10.3 - 2024-09-10
 
 Allow null as the return type for JSON functions
