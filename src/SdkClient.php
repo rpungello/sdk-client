@@ -400,10 +400,19 @@ class SdkClient
         foreach ($json as $key => $value) {
             $multipart[] = [
                 'name' => $key,
-                'contents' => $value,
+                'contents' => static::formatMultipartValue($value),
             ];
         }
 
         return $multipart;
+    }
+
+    private static function formatMultipartValue(mixed $value): string
+    {
+        if (is_array($value) || is_object($value)) {
+            return serialize($value);
+        }
+
+        return (string) $value;
     }
 }
