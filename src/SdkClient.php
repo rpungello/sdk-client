@@ -411,6 +411,8 @@ class SdkClient
     {
         if (is_array($value) || is_object($value)) {
             return serialize($value);
+        } elseif (is_bool($value)) {
+            return $value ? 'true' : 'false';
         }
 
         return (string) $value;

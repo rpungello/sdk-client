@@ -11,14 +11,20 @@ it('can convert json to multipart', function () {
     $json = [
         'foo' => 'bar',
         'bar' => 'baz',
+        'true' => true,
+        'false' => false,
     ];
 
     $multipart = SdkClient::convertJsonToMultipart($json);
-    expect($multipart)->toHaveCount(2)
+    expect($multipart)->toHaveCount(4)
         ->and($multipart[0])->toHaveKey('name', 'foo')
         ->and($multipart[0])->toHaveKey('contents', 'bar')
         ->and($multipart[1])->toHaveKey('name', 'bar')
-        ->and($multipart[1])->toHaveKey('contents', 'baz');
+        ->and($multipart[1])->toHaveKey('contents', 'baz')
+        ->and($multipart[2])->toHaveKey('name', 'true')
+        ->and($multipart[2])->toHaveKey('contents', 'true')
+        ->and($multipart[3])->toHaveKey('name', 'false')
+        ->and($multipart[3])->toHaveKey('contents', 'false');
 });
 
 it('can convert nested json to multipart', function () {
