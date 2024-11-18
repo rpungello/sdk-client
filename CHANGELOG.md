@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.11.2 - 2024-11-18
+
+Fixed casting boolean json values to multipart form data
+
 ## 1.11.1 - 2024-09-20
 
 Format multipart data as strings using serialize()
