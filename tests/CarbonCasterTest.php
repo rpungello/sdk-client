@@ -11,8 +11,8 @@ it('can convert valid dates', function () {
     $caster = new CarbonCaster([Carbon::class]);
     $dateString = '2023-01-01';
     $date = $caster->cast($dateString);
-    expect($date)->toBeInstanceOf(Carbon::class);
-    expect($date->format('Y-m-d'))->toBe($dateString);
+    expect($date)->toBeInstanceOf(Carbon::class)
+        ->and($date->format('Y-m-d'))->toBe($dateString);
 });
 
 it('can convert empty dates', function () {
@@ -32,8 +32,8 @@ it('can convert valid dates with custom formats', function () {
     $caster = new CarbonCaster([Carbon::class], 'm/d/Y');
     $dateString = '01/01/2023';
     $date = $caster->cast($dateString);
-    expect($date)->toBeInstanceOf(Carbon::class);
-    expect($date->format('Y-m-d'))->toBe('2023-01-01');
+    expect($date)->toBeInstanceOf(Carbon::class)
+        ->and($date->format('Y-m-d'))->toBe('2023-01-01');
 });
 
 it('fails to convert invalid dates', function () {
@@ -55,12 +55,12 @@ it('can make get dto requests with dates', function () {
     ]);
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
     $response = $client->getDto('dummy', DummyDtoCarbon::class);
-    expect($response)->toBeInstanceOf(DummyDtoCarbon::class);
-    expect($response->id)->toBe(1);
-    expect($response->name)->toBe('John Smith');
-    expect($response->comment)->toBe('This is a comment');
-    expect($response->date)->toBeInstanceOf(Carbon::class);
-    expect($response->date->format('Y-m-d'))->toBe('2023-01-01');
+    expect($response)->toBeInstanceOf(DummyDtoCarbon::class)
+        ->and($response->id)->toBe(1)
+        ->and($response->name)->toBe('John Smith')
+        ->and($response->comment)->toBe('This is a comment')
+        ->and($response->date)->toBeInstanceOf(Carbon::class)
+        ->and($response->date->format('Y-m-d'))->toBe('2023-01-01');
 });
 
 it('can make get dto requests with dates and custom formats', function () {
@@ -75,12 +75,12 @@ it('can make get dto requests with dates and custom formats', function () {
     ]);
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
     $response = $client->getDto('dummy', DummyDtoCarbon::class);
-    expect($response)->toBeInstanceOf(DummyDtoCarbon::class);
-    expect($response->id)->toBe(1);
-    expect($response->name)->toBe('John Smith');
-    expect($response->comment)->toBe('This is a comment');
-    expect($response->date_with_format)->toBeInstanceOf(Carbon::class);
-    expect($response->date_with_format->format('Y-m-d'))->toBe('2023-01-01');
+    expect($response)->toBeInstanceOf(DummyDtoCarbon::class)
+        ->and($response->id)->toBe(1)
+        ->and($response->name)->toBe('John Smith')
+        ->and($response->comment)->toBe('This is a comment')
+        ->and($response->date_with_format)->toBeInstanceOf(Carbon::class)
+        ->and($response->date_with_format->format('Y-m-d'))->toBe('2023-01-01');
 });
 
 it('fails making get dto requests with dates and custom formats with invalid dates', function () {
@@ -95,9 +95,9 @@ it('fails making get dto requests with dates and custom formats with invalid dat
     ]);
     $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
     $response = $client->getDto('dummy', DummyDtoCarbon::class);
-    expect($response)->toBeInstanceOf(DummyDtoCarbon::class);
-    expect($response->id)->toBe(1);
-    expect($response->name)->toBe('John Smith');
-    expect($response->comment)->toBe('This is a comment');
-    expect($response->date_with_format)->toBeNull();
+    expect($response)->toBeInstanceOf(DummyDtoCarbon::class)
+        ->and($response->id)->toBe(1)
+        ->and($response->name)->toBe('John Smith')
+        ->and($response->comment)->toBe('This is a comment')
+        ->and($response->date_with_format)->toBeNull();
 });
