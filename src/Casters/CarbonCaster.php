@@ -14,6 +14,10 @@ class CarbonCaster implements Caster
 
     public function cast(mixed $value): ?Carbon
     {
+        if (empty($value)) {
+            return null;
+        }
+
         try {
             if (! empty($this->format)) {
                 return Carbon::createFromFormat($this->format, $value);

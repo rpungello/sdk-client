@@ -15,6 +15,19 @@ it('can convert valid dates', function () {
     expect($date->format('Y-m-d'))->toBe($dateString);
 });
 
+it('can convert empty dates', function () {
+    $caster = new CarbonCaster([Carbon::class]);
+    $dateString = '';
+    $date = $caster->cast($dateString);
+    expect($date)->toBeNull();
+});
+
+it('can convert null dates', function () {
+    $caster = new CarbonCaster([Carbon::class]);
+    $date = $caster->cast(null);
+    expect($date)->toBeNull();
+});
+
 it('can convert valid dates with custom formats', function () {
     $caster = new CarbonCaster([Carbon::class], 'm/d/Y');
     $dateString = '01/01/2023';
