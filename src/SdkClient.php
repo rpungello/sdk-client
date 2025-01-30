@@ -14,61 +14,54 @@ class SdkClient
 {
     protected ?GuzzleClient $guzzle;
 
-    public function __construct(string $baseUri, ?HandlerStack $handler = null, ?string $userAgent = null, ?string $accept = 'application/json', bool $cookies = false)
+    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = false)
     {
-        $this->guzzle = static::initializeGuzzleClient($baseUri, $handler, $userAgent, $accept, $cookies);
+        $this->guzzle = $this->initializeGuzzleClient();
     }
 
     /**
      * Instantiates a new Guzzle client
-     *
-     * @param string $baseUri
-     * @param HandlerStack|null $handler
-     * @param string|null $userAgent
-     * @param string|null $accept
-     * @param bool $cookies
-     * @return GuzzleClient
      */
-    protected static function initializeGuzzleClient(string $baseUri, ?HandlerStack $handler = null, ?string $userAgent = null, ?string $accept = null, bool $cookies = false): GuzzleClient
+    protected function initializeGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient(
-            static::getGuzzleClientConfig($baseUri, $handler, $userAgent, $accept, $cookies)
+            $this->getGuzzleClientConfig()
         );
     }
 
     /**
      * Gets the config array for a new Guzzle client
      *
-     * @param string $baseUri
-     * @param HandlerStack|null $handler
-     * @param string|null $userAgent
-     * @param string|null $accept
-     * @param bool $cookies
      * @return array
      */
-    protected static function getGuzzleClientConfig(string $baseUri, ?HandlerStack $handler = null, ?string $userAgent = null, ?string $accept = null, bool $cookies = false): array
+    protected function getGuzzleClientConfig(): array
     {
         $config = [
-            'base_uri' => $baseUri,
-            'cookies' => $cookies,
+            'base_uri' => $this->baseUri,
+            'cookies' => $this->cookies,
             'headers' => [],
         ];
 
-        if (! is_null($handler)) {
-            $config['handler'] = $handler;
+        if (! is_null($this->handler)) {
+            $config['handler'] = $this->handler;
         }
 
-        if (! empty($userAgent)) {
-            $config['headers']['user-agent'] = $userAgent;
+        if (! empty($this->userAgent)) {
+            $config['headers']['user-agent'] = $this->userAgent;
         }
 
-        if (! empty($accept)) {
-            $config['headers']['accept'] = $accept;
+        if (! empty($this->accept)) {
+            $config['headers']['accept'] = $this->accept;
         }
 
         return $config;
     }
 
+    /**
+     * Returns the preconfigured Guzzle client for this SDK client, which is instantiated upon construction
+     *
+     * @return GuzzleClient
+     */
     public function getGuzzleClient(): GuzzleClient
     {
         return $this->guzzle;
