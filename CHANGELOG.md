@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.12.0 - 2025-01-30
+
+Refactor Guzzle initialization logic into static functions
+
 ## 1.11.2 - 2024-11-18
 
 Fixed casting boolean json values to multipart form data
