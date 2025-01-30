@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.13.0 - 2025-01-30
+
+Revert back to non-static initialization methods
+
 ## 1.12.0 - 2025-01-30
 
 Refactor Guzzle initialization logic into static functions
