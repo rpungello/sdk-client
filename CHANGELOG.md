@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 1.14.0 - 2025-02-03
+
+Allow carbon 3.x
+
 ## 1.13.0 - 2025-01-30
 
 Revert back to non-static initialization methods
