@@ -1,6 +1,5 @@
 {
     "name": "rpungello/sdk-client",
-    "version": "1.14.0",
     "description": "Generic client for creating PHP-based SDKs using Spatie's DTOs for data transfer",
     "keywords": [
         "rpungello",
