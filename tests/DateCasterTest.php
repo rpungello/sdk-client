@@ -4,6 +4,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Rpungello\SdkClient\Casters\DateTimeCaster;
+use Rpungello\SdkClient\Drivers\GuzzleDriver;
 use Rpungello\SdkClient\Tests\Dtos\DummyDto;
 use Rpungello\SdkClient\Tests\Dtos\DummyDtoDateFormat;
 
@@ -40,14 +41,14 @@ it('can make get dto requests with dates', function () {
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
-    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $client = new Rpungello\SdkClient\SdkClient(new GuzzleDriver('https://example.com', HandlerStack::create($mock)));
     $response = $client->getDto('dummy', DummyDto::class);
-    expect($response)->toBeInstanceOf(DummyDto::class);
-    expect($response->id)->toBe(1);
-    expect($response->name)->toBe('John Smith');
-    expect($response->comment)->toBe('This is a comment');
-    expect($response->date)->toBeInstanceOf(DateTimeImmutable::class);
-    expect($response->date->format('Y-m-d'))->toBe('2023-01-01');
+    expect($response)->toBeInstanceOf(DummyDto::class)
+        ->and($response->id)->toBe(1)
+        ->and($response->name)->toBe('John Smith')
+        ->and($response->comment)->toBe('This is a comment')
+        ->and($response->date)->toBeInstanceOf(DateTimeImmutable::class)
+        ->and($response->date->format('Y-m-d'))->toBe('2023-01-01');
 });
 
 it('can make get dto requests with dates and custom formats', function () {
@@ -60,12 +61,12 @@ it('can make get dto requests with dates and custom formats', function () {
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
-    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $client = new Rpungello\SdkClient\SdkClient(new GuzzleDriver('https://example.com', HandlerStack::create($mock)));
     $response = $client->getDto('dummy', DummyDtoDateFormat::class);
-    expect($response)->toBeInstanceOf(DummyDtoDateFormat::class);
-    expect($response->id)->toBe(1);
-    expect($response->name)->toBe('John Smith');
-    expect($response->comment)->toBe('This is a comment');
-    expect($response->date)->toBeInstanceOf(DateTimeImmutable::class);
-    expect($response->date->format('Y-m-d'))->toBe('2023-01-01');
+    expect($response)->toBeInstanceOf(DummyDtoDateFormat::class)
+        ->and($response->id)->toBe(1)
+        ->and($response->name)->toBe('John Smith')
+        ->and($response->comment)->toBe('This is a comment')
+        ->and($response->date)->toBeInstanceOf(DateTimeImmutable::class)
+        ->and($response->date->format('Y-m-d'))->toBe('2023-01-01');
 });

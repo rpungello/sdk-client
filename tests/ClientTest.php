@@ -3,7 +3,7 @@
 use Rpungello\SdkClient\SdkClient;
 
 it('can create clients', function () {
-    $client = new Rpungello\SdkClient\SdkClient('https://example.com');
+    $client = new Rpungello\SdkClient\SdkClient(new \Rpungello\SdkClient\Drivers\GuzzleDriver('https://example.com'));
     expect($client)->toBeInstanceOf(SdkClient::class);
 });
 

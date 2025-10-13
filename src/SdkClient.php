@@ -2,94 +2,28 @@
 
 namespace Rpungello\SdkClient;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use Rpungello\SdkClient\Drivers\Driver;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class SdkClient
 {
-    protected ?GuzzleClient $guzzle;
-
-    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = false)
+    public function __construct(protected Driver $driver)
     {
-        $this->guzzle = $this->initializeGuzzleClient();
     }
 
     /**
-     * Instantiates a new Guzzle client
-     */
-    protected function initializeGuzzleClient(): GuzzleClient
-    {
-        return new GuzzleClient(
-            $this->getGuzzleClientConfig()
-        );
-    }
-
-    /**
-     * Gets the config array for a new Guzzle client
-     *
-     * @return array
-     */
-    protected function getGuzzleClientConfig(): array
-    {
-        $config = [
-            'base_uri' => $this->baseUri,
-            'cookies' => $this->cookies,
-            'headers' => [],
-        ];
-
-        if (! is_null($this->handler)) {
-            $config['handler'] = $this->handler;
-        }
-
-        if (! empty($this->userAgent)) {
-            $config['headers']['user-agent'] = $this->userAgent;
-        }
-
-        if (! empty($this->accept)) {
-            $config['headers']['accept'] = $this->accept;
-        }
-
-        return $config;
-    }
-
-    /**
-     * Returns the preconfigured Guzzle client for this SDK client, which is instantiated upon construction
-     *
-     * @return GuzzleClient
-     */
-    public function getGuzzleClient(): GuzzleClient
-    {
-        return $this->guzzle;
-    }
-
-    /**
-     * Performs a GET request, returning the raw Guzzle response
+     * Performs a GET request, returning the raw response
      *
      * @param string $uri
      * @param array $query
      * @param array $headers
      * @return ResponseInterface
-     * @throws GuzzleException
      */
     public function get(string $uri, array $query = [], array $headers = []): ResponseInterface
     {
-        $requestOptions = [
-            RequestOptions::QUERY => $query,
-        ];
-
-        if (! empty($headers)) {
-            $requestOptions[RequestOptions::HEADERS] = $headers;
-        }
-
-        return $this->guzzle->get(
-            $uri,
-            $requestOptions
-        );
+        return $this->driver->get($uri, $query, $headers);
     }
 
     /**
@@ -98,7 +32,6 @@ class SdkClient
      * @param string $dtoClass
      * @param array $headers
      * @return DataTransferObject
-     * @throws GuzzleException
      */
     public function postJsonAsDto(string $uri, array|null $body, string $dtoClass, array $headers = []): mixed
     {
@@ -112,7 +45,6 @@ class SdkClient
      * @param DataTransferObject|null $dto
      * @param array $headers
      * @return DataTransferObject
-     * @throws GuzzleException
      * @throws UnknownProperties
      */
     public function postDto(string $uri, DataTransferObject $dto = null, array $headers = []): mixed
@@ -129,7 +61,6 @@ class SdkClient
      * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return array|null
-     * @throws GuzzleException
      */
     public function postJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ?array
     {
@@ -140,19 +71,16 @@ class SdkClient
     }
 
     /**
-     * Performs a POST request with a multipart body, returning the raw Guzzle response
+     * Performs a POST request with a multipart body, returning the raw response
      *
      * @param string $uri
      * @param array $body
      * @param array $headers
      * @return ResponseInterface
-     * @throws GuzzleException
      */
     public function postMultipart(string $uri, array $body, array $headers = []): ResponseInterface
     {
-        $requestOptions = $this->getRequestOptions($body, $headers, false);
-
-        return $this->guzzle->post($uri, $requestOptions);
+        return $this->driver->postMultipart($uri, $body, $headers);
     }
 
     /**
@@ -162,7 +90,6 @@ class SdkClient
      * @param array $body
      * @param array $headers
      * @return array|null
-     * @throws GuzzleException
      */
     public function postMultipartAsJson(string $uri, array $body, array $headers = []): ?array
     {
@@ -180,7 +107,6 @@ class SdkClient
      * @param string $dtoClass
      * @param array $headers
      * @return DataTransferObject
-     * @throws GuzzleException
      */
     public function postMultipartAsDto(string $uri, array $body, string $dtoClass, array $headers = []): DataTransferObject
     {
@@ -188,19 +114,16 @@ class SdkClient
     }
 
     /**
-     * Performs a POST request, returning the raw Guzzle response
+     * Performs a POST request, returning the raw response
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return ResponseInterface
-     * @throws GuzzleException
      */
     public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
-        $requestOptions = $this->getRequestOptions($body, $headers);
-
-        return $this->guzzle->post($uri, $requestOptions);
+        return $this->driver->post($uri, $body, $headers);
     }
 
     /**
@@ -210,7 +133,6 @@ class SdkClient
      * @param array $query
      * @param array $headers
      * @return array|null
-     * @throws GuzzleException
      */
     public function getJson(string $uri, array $query = [], array $headers = []): ?array
     {
@@ -228,7 +150,6 @@ class SdkClient
      * @param array $query
      * @param array $headers
      * @return DataTransferObject
-     * @throws GuzzleException
      * @throws UnknownProperties
      */
     public function getDto(string $uri, string $dtoClass, array $query = [], array $headers = []): DataTransferObject
@@ -246,7 +167,6 @@ class SdkClient
      * @param array $query
      * @param array $headers
      * @return DataTransferObject[]
-     * @throws GuzzleException
      * @throws UnknownProperties
      */
     public function getDtoArray(string $uri, string $dtoClass, array $query = [], array $headers = []): array
@@ -267,7 +187,6 @@ class SdkClient
      * @param array $data
      * @param array $headers
      * @return DataTransferObject
-     * @throws GuzzleException
      * @throws UnknownProperties
      */
     public function putDto(string $uri, DataTransferObject $dto = null, array $data = [], array $headers = []): mixed
@@ -290,7 +209,6 @@ class SdkClient
      * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return array|null
-     * @throws GuzzleException
      */
     public function putJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ?array
     {
@@ -301,35 +219,29 @@ class SdkClient
     }
 
     /**
-     * Performs a PUT request, returning the raw Guzzle response
+     * Performs a PUT request, returning the raw response
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return ResponseInterface
-     * @throws GuzzleException
      */
     public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
-        $requestOptions = $this->getRequestOptions($body, $headers);
-
-        return $this->guzzle->put($uri, $requestOptions);
+        return $this->driver->put($uri, $body, $headers);
     }
 
     /**
-     * Performs a PATCH request, returning the raw Guzzle response
+     * Performs a PATCH request, returning the raw response
      *
      * @param string $uri
      * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return ResponseInterface
-     * @throws GuzzleException
      */
     public function patch(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
-        $requestOptions = $this->getRequestOptions($body, $headers);
-
-        return $this->guzzle->patch($uri, $requestOptions);
+        return $this->driver->patch($uri, $body, $headers);
     }
 
     /**
@@ -339,7 +251,6 @@ class SdkClient
      * @param array|DataTransferObject|null $body
      * @param array $headers
      * @return array|null
-     * @throws GuzzleException
      */
     public function patchJson(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ?array
     {
@@ -355,7 +266,6 @@ class SdkClient
      * @param array $data
      * @param array $headers
      * @return mixed
-     * @throws GuzzleException
      */
     public function patchDto(string $uri, DataTransferObject $dto = null, array $data = [], array $headers = []): mixed
     {
@@ -370,36 +280,6 @@ class SdkClient
         );
     }
 
-    /**
-     * @param DataTransferObject|array|null $body
-     * @param array $headers
-     * @param bool $json
-     * @return array
-     */
-    public function getRequestOptions(DataTransferObject|array|null $body, array $headers, bool $json = true): array
-    {
-        if ($body instanceof DataTransferObject) {
-            $formattedBody = $body->toArray();
-        } else {
-            $formattedBody = $body;
-        }
-
-        $requestOptions = [];
-
-        if (! empty($formattedBody)) {
-            if ($json) {
-                $requestOptions[RequestOptions::JSON] = $formattedBody;
-            } else {
-                $requestOptions[RequestOptions::MULTIPART] = $formattedBody;
-            }
-        }
-
-        if (! empty($headers)) {
-            $requestOptions[RequestOptions::HEADERS] = $headers;
-        }
-
-        return $requestOptions;
-    }
 
     public static function convertJsonToMultipart(array $json): array
     {

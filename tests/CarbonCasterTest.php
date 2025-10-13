@@ -5,6 +5,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Rpungello\SdkClient\Casters\CarbonCaster;
+use Rpungello\SdkClient\Drivers\GuzzleDriver;
 use Rpungello\SdkClient\Tests\Dtos\DummyDtoCarbon;
 
 it('can convert valid dates', function () {
@@ -53,7 +54,7 @@ it('can make get dto requests with dates', function () {
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
-    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $client = new Rpungello\SdkClient\SdkClient(new GuzzleDriver('https://example.com', HandlerStack::create($mock)));
     $response = $client->getDto('dummy', DummyDtoCarbon::class);
     expect($response)->toBeInstanceOf(DummyDtoCarbon::class)
         ->and($response->id)->toBe(1)
@@ -73,7 +74,7 @@ it('can make get dto requests with dates and custom formats', function () {
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
-    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $client = new Rpungello\SdkClient\SdkClient(new GuzzleDriver('https://example.com', HandlerStack::create($mock)));
     $response = $client->getDto('dummy', DummyDtoCarbon::class);
     expect($response)->toBeInstanceOf(DummyDtoCarbon::class)
         ->and($response->id)->toBe(1)
@@ -93,7 +94,7 @@ it('fails making get dto requests with dates and custom formats with invalid dat
     $mock = new MockHandler([
         new Response(200, ['content-type' => 'application/json'], json_encode($data)),
     ]);
-    $client = new Rpungello\SdkClient\SdkClient('https://example.com', HandlerStack::create($mock));
+    $client = new Rpungello\SdkClient\SdkClient(new GuzzleDriver('https://example.com', HandlerStack::create($mock)));
     $response = $client->getDto('dummy', DummyDtoCarbon::class);
     expect($response)->toBeInstanceOf(DummyDtoCarbon::class)
         ->and($response->id)->toBe(1)
