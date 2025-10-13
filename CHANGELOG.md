@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.0.0-beta.3 - 2025-10-13
+
+Update exception handling
+
 ## 2.0.0-beta.2 - 2025-10-13
 
 Extract out `PendingRequest` logic
