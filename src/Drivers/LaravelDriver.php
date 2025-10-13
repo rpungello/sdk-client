@@ -9,7 +9,6 @@ use Rpungello\SdkClient\DataTransferObject;
 
 class LaravelDriver extends Driver
 {
-
     public function __construct(protected PendingRequest $http)
     {
     }
