@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.1.0 - 2025-10-13
+
+Added `getRelativeUri()` function
+
 ## 2.0.1 - 2025-10-13
 
 Remove out-of-band version management
