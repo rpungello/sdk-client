@@ -16,9 +16,9 @@ class LaravelDriver extends Driver
     /**
      * @throws BindingResolutionException
      */
-    public function __construct(Application $app, string $baseUri)
+    public function __construct(Application $app, private readonly string $baseUri)
     {
-        $this->http = $app->make(Factory::class)->baseUrl($baseUri);
+        $this->http = $app->make(Factory::class);
     }
 
     /**
@@ -27,6 +27,7 @@ class LaravelDriver extends Driver
     public function get(string $uri, array $query = [], array $headers = []): ResponseInterface
     {
         return $this->http->withHeaders($headers)
+            ->baseUrl($this->baseUri)
             ->get($uri, $query)
             ->toPsrResponse();
     }
@@ -37,6 +38,7 @@ class LaravelDriver extends Driver
     public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         return $this->http->withHeaders($headers)
+            ->baseUrl($this->baseUri)
             ->post($uri, $body)
             ->toPsrResponse();
     }
@@ -47,6 +49,7 @@ class LaravelDriver extends Driver
     public function postMultipart(string $uri, array $body, array $headers = []): ResponseInterface
     {
         return $this->http->withHeaders($headers)
+            ->baseUrl($this->baseUri)
             ->asMultipart()
             ->post($uri, $body)
             ->toPsrResponse();
@@ -58,6 +61,7 @@ class LaravelDriver extends Driver
     public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         return $this->http->withHeaders($headers)
+            ->baseUrl($this->baseUri)
             ->put($uri, $body)
             ->toPsrResponse();
     }
@@ -68,6 +72,7 @@ class LaravelDriver extends Driver
     public function patch(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         return $this->http->withHeaders($headers)
+            ->baseUrl($this->baseUri)
             ->patch($uri, $body)
             ->toPsrResponse();
     }
