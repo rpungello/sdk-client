@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Rpungello\SdkClient\DataTransferObject;
 
@@ -24,6 +25,7 @@ class LaravelDriver extends Driver
 
     /**
      * @throws ConnectionException
+     * @throws RequestException
      */
     public function get(string $uri, array $query = [], array $headers = []): ResponseInterface
     {
@@ -34,6 +36,7 @@ class LaravelDriver extends Driver
 
     /**
      * @throws ConnectionException
+     * @throws RequestException
      */
     public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
@@ -44,6 +47,7 @@ class LaravelDriver extends Driver
 
     /**
      * @throws ConnectionException
+     * @throws RequestException
      */
     public function postMultipart(string $uri, array $body, array $headers = []): ResponseInterface
     {
@@ -55,6 +59,7 @@ class LaravelDriver extends Driver
 
     /**
      * @throws ConnectionException
+     * @throws RequestException
      */
     public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
@@ -65,6 +70,7 @@ class LaravelDriver extends Driver
 
     /**
      * @throws ConnectionException
+     * @throws RequestException
      */
     public function patch(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
@@ -76,6 +82,8 @@ class LaravelDriver extends Driver
     protected function pendingRequest(array $headers = []): PendingRequest
     {
         return $this->http->withHeaders($headers)
-            ->baseUrl($this->baseUri);
+            ->baseUrl($this->baseUri)
+            ->acceptJson()
+            ->throw();
     }
 }
