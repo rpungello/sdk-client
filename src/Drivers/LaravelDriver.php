@@ -2,15 +2,23 @@
 
 namespace Rpungello\SdkClient\Drivers;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Rpungello\SdkClient\DataTransferObject;
 
 class LaravelDriver extends Driver
 {
-    public function __construct(protected PendingRequest $http)
+    private Factory $http;
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function __construct(Application $app, string $baseUri)
     {
+        $this->http = $app->make(Factory::class)->baseUrl($baseUri);
     }
 
     /**
