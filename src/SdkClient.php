@@ -280,6 +280,11 @@ class SdkClient
         );
     }
 
+    public function getRelativeUri(string $path, array $query = []): string
+    {
+        return $this->driver->getRelativeUri($path, $query);
+    }
+
     public static function convertJsonToMultipart(array $json): array
     {
         $multipart = [];

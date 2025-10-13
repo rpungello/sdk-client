@@ -8,6 +8,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Rpungello\SdkClient\DataTransferObject;
 
@@ -18,8 +19,10 @@ class LaravelDriver extends Driver
     /**
      * @throws BindingResolutionException
      */
-    public function __construct(Application $app, private readonly string $baseUri)
+    public function __construct(Application $app, string $baseUri)
     {
+        parent::__construct($baseUri);
+
         $this->http = $app->make(Factory::class);
     }
 
@@ -85,5 +88,10 @@ class LaravelDriver extends Driver
             ->baseUrl($this->baseUri)
             ->acceptJson()
             ->throw();
+    }
+
+    public function getRelativeUri(string $path, array $query = []): string
+    {
+        return (new Uri($this->baseUri))->withPath($path)->withQuery($query);
     }
 }

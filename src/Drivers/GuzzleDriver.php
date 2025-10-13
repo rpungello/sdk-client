@@ -5,6 +5,7 @@ namespace Rpungello\SdkClient\Drivers;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Rpungello\SdkClient\DataTransferObject;
@@ -13,8 +14,10 @@ class GuzzleDriver extends Driver
 {
     protected ?GuzzleClient $guzzle;
 
-    public function __construct(protected string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = false)
+    public function __construct(string $baseUri, protected ?HandlerStack $handler = null, protected ?string $userAgent = null, protected ?string $accept = 'application/json', protected bool $cookies = false)
     {
+        parent::__construct($baseUri);
+
         $this->guzzle = $this->initializeGuzzleClient();
     }
 
@@ -138,5 +141,10 @@ class GuzzleDriver extends Driver
         $requestOptions = $this->getRequestOptions($body, $headers);
 
         return $this->guzzle->patch($uri, $requestOptions);
+    }
+
+    public function getRelativeUri(string $path, array $query = []): string
+    {
+        return (new Uri($this->baseUri))->withPath($path)->withQuery(http_build_query($query));
     }
 }
