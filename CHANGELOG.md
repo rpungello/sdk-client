@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.0.0-beta.2 - 2025-10-13
+
+Extract out `PendingRequest` logic
+
 ## 1.14.0 - 2025-02-03
 
 Allow carbon 3.x
