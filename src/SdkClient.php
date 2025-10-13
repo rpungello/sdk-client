@@ -280,7 +280,6 @@ class SdkClient
         );
     }
 
-
     public static function convertJsonToMultipart(array $json): array
     {
         $multipart = [];
