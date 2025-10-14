@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.1.1 - 2025-10-14
+
+Wrap exceptions logic
+
 ## 2.1.0 - 2025-10-13
 
 Added `getRelativeUri()` function
