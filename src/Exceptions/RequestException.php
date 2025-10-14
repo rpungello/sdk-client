@@ -74,4 +74,15 @@ abstract class RequestException extends RuntimeException
     {
         return $this->response?->getBody()->getContents();
     }
+
+    public function getJsonResponseBody(): ?array
+    {
+        $json = json_decode($this->getResponseBody(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $json;
+        }
+
+        return null;
+    }
 }
