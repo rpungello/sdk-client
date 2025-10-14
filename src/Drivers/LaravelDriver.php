@@ -4,13 +4,15 @@ namespace Rpungello\SdkClient\Drivers;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\RequestException as LaravelRequestException;
 use Illuminate\Support\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Rpungello\SdkClient\DataTransferObject;
+use Rpungello\SdkClient\Exceptions\ConnectionException;
+use Rpungello\SdkClient\Exceptions\RequestException;
 
 class LaravelDriver extends Driver
 {
@@ -26,60 +28,70 @@ class LaravelDriver extends Driver
         $this->http = $app->make(Factory::class);
     }
 
-    /**
-     * @throws ConnectionException
-     * @throws RequestException
-     */
     public function get(string $uri, array $query = [], array $headers = []): ResponseInterface
     {
-        return $this->pendingRequest($headers)
-            ->get($uri, $query)
-            ->toPsrResponse();
+        try {
+            return $this->pendingRequest($headers)
+                ->get($uri, $query)
+                ->toPsrResponse();
+        } catch (LaravelConnectionException $e) {
+            throw ConnectionException::fromPrevious($e);
+        } catch (LaravelRequestException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws ConnectionException
-     * @throws RequestException
-     */
     public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
-        return $this->pendingRequest($headers)
-            ->post($uri, $body)
-            ->toPsrResponse();
+        try {
+            return $this->pendingRequest($headers)
+                ->post($uri, $body)
+                ->toPsrResponse();
+        } catch (LaravelConnectionException $e) {
+            throw ConnectionException::fromPrevious($e);
+        } catch (LaravelRequestException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws ConnectionException
-     * @throws RequestException
-     */
     public function postMultipart(string $uri, array $body, array $headers = []): ResponseInterface
     {
-        return $this->pendingRequest($headers)
-            ->asMultipart()
-            ->post($uri, $body)
-            ->toPsrResponse();
+        try {
+            return $this->pendingRequest($headers)
+                ->asMultipart()
+                ->post($uri, $body)
+                ->toPsrResponse();
+        } catch (LaravelConnectionException $e) {
+            throw ConnectionException::fromPrevious($e);
+        } catch (LaravelRequestException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws ConnectionException
-     * @throws RequestException
-     */
     public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
-        return $this->pendingRequest($headers)
-            ->put($uri, $body)
-            ->toPsrResponse();
+        try {
+            return $this->pendingRequest($headers)
+                ->put($uri, $body)
+                ->toPsrResponse();
+        } catch (LaravelConnectionException $e) {
+            throw ConnectionException::fromPrevious($e);
+        } catch (LaravelRequestException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws ConnectionException
-     * @throws RequestException
-     */
     public function patch(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
-        return $this->pendingRequest($headers)
-            ->patch($uri, $body)
-            ->toPsrResponse();
+        try {
+            return $this->pendingRequest($headers)
+                ->patch($uri, $body)
+                ->toPsrResponse();
+        } catch (LaravelConnectionException $e) {
+            throw ConnectionException::fromPrevious($e);
+        } catch (LaravelRequestException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
     protected function pendingRequest(array $headers = []): PendingRequest

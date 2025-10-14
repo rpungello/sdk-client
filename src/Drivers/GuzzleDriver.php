@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Rpungello\SdkClient\DataTransferObject;
+use Rpungello\SdkClient\Exceptions\RequestException;
 
 class GuzzleDriver extends Driver
 {
@@ -84,9 +85,6 @@ class GuzzleDriver extends Driver
         return $requestOptions;
     }
 
-    /**
-     * @throws GuzzleException
-     */
     public function get(string $uri, array $query = [], array $headers = []): ResponseInterface
     {
         $requestOptions = [
@@ -97,50 +95,58 @@ class GuzzleDriver extends Driver
             $requestOptions[RequestOptions::HEADERS] = $headers;
         }
 
-        return $this->guzzle->get(
-            $uri,
-            $requestOptions
-        );
+        try {
+            return $this->guzzle->get(
+                $uri,
+                $requestOptions
+            );
+        } catch (GuzzleException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws GuzzleException
-     */
     public function postMultipart(string $uri, array $body, array $headers = []): ResponseInterface
     {
         $requestOptions = $this->getRequestOptions($body, $headers, false);
 
-        return $this->guzzle->post($uri, $requestOptions);
+        try {
+            return $this->guzzle->post($uri, $requestOptions);
+        } catch (GuzzleException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws GuzzleException
-     */
     public function post(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         $requestOptions = $this->getRequestOptions($body, $headers);
 
-        return $this->guzzle->post($uri, $requestOptions);
+        try {
+            return $this->guzzle->post($uri, $requestOptions);
+        } catch (GuzzleException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws GuzzleException
-     */
     public function put(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         $requestOptions = $this->getRequestOptions($body, $headers);
 
-        return $this->guzzle->put($uri, $requestOptions);
+        try {
+            return $this->guzzle->put($uri, $requestOptions);
+        } catch (GuzzleException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
-    /**
-     * @throws GuzzleException
-     */
     public function patch(string $uri, array|DataTransferObject|null $body = null, array $headers = []): ResponseInterface
     {
         $requestOptions = $this->getRequestOptions($body, $headers);
 
-        return $this->guzzle->patch($uri, $requestOptions);
+        try {
+            return $this->guzzle->patch($uri, $requestOptions);
+        } catch (GuzzleException $e) {
+            throw RequestException::fromPrevious($e);
+        }
     }
 
     public function getRelativeUri(string $path, array $query = []): string
