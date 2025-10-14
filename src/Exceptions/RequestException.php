@@ -2,6 +2,7 @@
 
 namespace Rpungello\SdkClient\Exceptions;
 
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use Illuminate\Http\Client\RequestException as LaravelRequestException;
 use Psr\Http\Message\ResponseInterface;
@@ -40,7 +41,7 @@ abstract class RequestException extends RuntimeException
 
     private static function extractHttpStatusCode(Throwable $previous): ?int
     {
-        if ($previous instanceof GuzzleRequestException) {
+        if ($previous instanceof GuzzleRequestException || $previous instanceof ClientException) {
             return $previous->getResponse()->getStatusCode();
         } elseif ($previous instanceof LaravelRequestException) {
             return $previous->response->getStatusCode();
@@ -51,7 +52,7 @@ abstract class RequestException extends RuntimeException
 
     private static function extractResponse(Throwable $previous): ?ResponseInterface
     {
-        if ($previous instanceof GuzzleRequestException) {
+        if ($previous instanceof GuzzleRequestException || $previous instanceof ClientException) {
             return $previous->getResponse();
         } elseif ($previous instanceof LaravelRequestException) {
             return $previous->response->toPsrResponse();

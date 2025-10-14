@@ -3,6 +3,7 @@
 namespace Rpungello\SdkClient\Drivers;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
@@ -100,7 +101,7 @@ class GuzzleDriver extends Driver
                 $uri,
                 $requestOptions
             );
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException|ClientException $e) {
             throw RequestException::fromPrevious($e);
         }
     }
@@ -111,7 +112,7 @@ class GuzzleDriver extends Driver
 
         try {
             return $this->guzzle->post($uri, $requestOptions);
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException|ClientException $e) {
             throw RequestException::fromPrevious($e);
         }
     }
@@ -122,7 +123,7 @@ class GuzzleDriver extends Driver
 
         try {
             return $this->guzzle->post($uri, $requestOptions);
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException|ClientException $e) {
             throw RequestException::fromPrevious($e);
         }
     }
@@ -133,7 +134,7 @@ class GuzzleDriver extends Driver
 
         try {
             return $this->guzzle->put($uri, $requestOptions);
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException|ClientException $e) {
             throw RequestException::fromPrevious($e);
         }
     }
@@ -144,7 +145,7 @@ class GuzzleDriver extends Driver
 
         try {
             return $this->guzzle->patch($uri, $requestOptions);
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException|ClientException $e) {
             throw RequestException::fromPrevious($e);
         }
     }
