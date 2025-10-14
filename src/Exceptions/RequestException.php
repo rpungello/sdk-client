@@ -4,6 +4,7 @@ namespace Rpungello\SdkClient\Exceptions;
 
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use Illuminate\Http\Client\RequestException as LaravelRequestException;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -12,12 +13,15 @@ abstract class RequestException extends RuntimeException
 {
     protected ?int $httpStatusCode = null;
 
+    protected ?ResponseInterface $response = null;
+
     public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
         if (! is_null($previous)) {
             $this->httpStatusCode = static::extractHttpStatusCode($previous);
+            $this->response = static::extractResponse($previous);
         }
     }
 
@@ -45,8 +49,24 @@ abstract class RequestException extends RuntimeException
         return null;
     }
 
+    private static function extractResponse(Throwable $previous): ?ResponseInterface
+    {
+        if ($previous instanceof GuzzleRequestException) {
+            return $previous->getResponse();
+        } elseif ($previous instanceof LaravelRequestException) {
+            return $previous->response->toPsrResponse();
+        }
+
+        return null;
+    }
+
     public function getHttpStatusCode(): int
     {
         return $this->httpStatusCode;
+    }
+
+    public function getResponse(): ?ResponseInterface
+    {
+        return $this->response;
     }
 }
