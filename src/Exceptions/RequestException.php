@@ -69,4 +69,9 @@ abstract class RequestException extends RuntimeException
     {
         return $this->response;
     }
+
+    public function getResponseBody(): ?string
+    {
+        return $this->response?->getBody()->getContents();
+    }
 }
