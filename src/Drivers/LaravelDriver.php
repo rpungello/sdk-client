@@ -45,7 +45,7 @@ class LaravelDriver extends Driver
     {
         try {
             return $this->pendingRequest($headers)
-                ->post($uri, $body)
+                ->post($uri, $this->convertBodyToPostData($body))
                 ->toPsrResponse();
         } catch (LaravelConnectionException $e) {
             throw ConnectionException::fromPrevious($e);
@@ -59,7 +59,7 @@ class LaravelDriver extends Driver
         try {
             return $this->pendingRequest($headers)
                 ->asMultipart()
-                ->post($uri, $body)
+                ->post($uri, $this->convertBodyToPostData($body))
                 ->toPsrResponse();
         } catch (LaravelConnectionException $e) {
             throw ConnectionException::fromPrevious($e);
@@ -72,7 +72,7 @@ class LaravelDriver extends Driver
     {
         try {
             return $this->pendingRequest($headers)
-                ->put($uri, $body)
+                ->put($uri, $this->convertBodyToPostData($body))
                 ->toPsrResponse();
         } catch (LaravelConnectionException $e) {
             throw ConnectionException::fromPrevious($e);
@@ -85,7 +85,7 @@ class LaravelDriver extends Driver
     {
         try {
             return $this->pendingRequest($headers)
-                ->patch($uri, $body)
+                ->patch($uri, $this->convertBodyToPostData($body))
                 ->toPsrResponse();
         } catch (LaravelConnectionException $e) {
             throw ConnectionException::fromPrevious($e);
@@ -105,5 +105,16 @@ class LaravelDriver extends Driver
     public function getRelativeUri(string $path, array $query = []): string
     {
         return (new Uri($this->baseUri))->withPath($path)->withQuery($query);
+    }
+
+    private function convertBodyToPostData(array|DataTransferObject|null $body): ?array
+    {
+        if (is_array($body)) {
+            return $body;
+        } elseif ($body instanceof DataTransferObject) {
+            return $body->toArray();
+        } else {
+            return null;
+        }
     }
 }
