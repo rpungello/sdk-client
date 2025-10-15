@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.1.4 - 2025-10-15
+
+Explicit DTO to array conversion in Laravel driver
+
 ## 2.1.3 - 2025-10-14
 
 Explicitly handle guzzle client exceptions
