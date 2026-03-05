@@ -61,7 +61,7 @@ abstract class RequestException extends RuntimeException
         return null;
     }
 
-    public function getHttpStatusCode(): int
+    public function getHttpStatusCode(): ?int
     {
         return $this->httpStatusCode;
     }
