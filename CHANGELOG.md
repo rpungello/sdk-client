@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.1.5 - 2026-03-05
+
+Fix `RequestException::getHttpStatusCode()` return type
+
 ## 2.1.4 - 2025-10-15
 
 Explicit DTO to array conversion in Laravel driver
