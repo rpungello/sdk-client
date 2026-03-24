@@ -22,7 +22,7 @@
         "spatie/data-transfer-object": "^3.9"
     },
     "require-dev": {
-        "pestphp/pest": ">=1.20 <5.0",
+        "pestphp/pest": "^1.20",
         "friendsofphp/php-cs-fixer": "^3.13",
         "spatie/ray": "^1.28"
     },
