@@ -2,6 +2,10 @@
 
 All notable changes to `sdk-client` will be documented in this file.
 
+## 2.2.0 - 2026-03-24
+
+Add support for Laravel 13.x
+
 ## 2.1.5 - 2026-03-05
 
 Fix `RequestException::getHttpStatusCode()` return type
